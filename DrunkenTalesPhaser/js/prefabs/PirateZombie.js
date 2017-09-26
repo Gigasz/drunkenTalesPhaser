@@ -2,7 +2,7 @@
 var DrunkenTales = DrunkenTales || {};
 
 //Setting PirateZombie's class in MonsterKong's state
-DrunkenTales.PirateZombie = function (game, data, player, ground) {
+DrunkenTales.PirateZombie = function (game, data) {
     //this = Zombie!
     console.log(data);
 
@@ -19,13 +19,18 @@ DrunkenTales.PirateZombie = function (game, data, player, ground) {
     //parameters: (key, frames, fps, loop)
     this.animations.add('roaming', [0, 1], 2, true);
 
+    this.enableBody = true;
+
     //enabling game physics
     game.physics.arcade.enable(this);
+    console.log(game.physics.arcade);
+    console.log(this.game.physics);
 
     //setting custom info about Zombie
     this.customParams = {};
 
     this.scale.setTo(1.2);
+
 }
 
 //Setting PirateZombie's prototype methods the same as in phaser's sprites
