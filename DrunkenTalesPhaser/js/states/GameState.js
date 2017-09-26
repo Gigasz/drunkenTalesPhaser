@@ -59,11 +59,11 @@ DrunkenTales.GameState = {
         this.player = new DrunkenTales.Player(this.game, this.levelData, this.cursors);
         this.game.add.existing(this.player);
 
-        //calling crates creation
-        this.createCrates(this.levelData);
-
         //calling the function that returns the enemies
         this.createEnemies();
+
+        //calling crates creation
+        this.createCrates(this.levelData);
 
         //calling the function that returns the ship (goal)
         this.createShip();
@@ -83,9 +83,14 @@ DrunkenTales.GameState = {
 
 
         //rendering water
+        // var waterData = this.levelData.waterData;
 
         this.water = this.add.group();
         this.water.enableBody = true;
+
+        // waterData.forEach(function (element) {
+        //     this.water.create(element.x * 128, element.y, 'water');
+        // }, this);
 
         for (var i = 0; i < 80; i++) {
             this.water.create(i * 128, 710, 'water')
@@ -133,12 +138,24 @@ DrunkenTales.GameState = {
         //adding physics engine to the ground
         this.game.physics.arcade.enable(this.ground);
 
-
-
     },
 
     createEnemies: function () {
-        this.createZombies();
+        this.zombies = this.add.group();
+        this.zombies.enableBody = true;
+
+        var zombie;
+
+        this.levelData.zombiePiratesData.forEach(function(element) {
+            zombie = new DrunkenTales.PirateZombie(this.game, element);
+            this.game.add.existing(zombie);
+            // zombie = this.zombies.create(element.x, element.y, 'pirateZombie');
+        },this);
+
+        this.zombies.setAll('anchor.setTo', 0.5);
+
+        // console.log(this.zombies);
+
 
     },
 
@@ -146,40 +163,21 @@ DrunkenTales.GameState = {
     createCrates: function (data) {
         //creating crates
         this.crates = this.add.group();
-        this.crates.scale.setTo(0.5);
         this.crates.enableBody = true;
 
         var crate;
 
         data.cratesData.forEach(function (element, index) {
-            crate = this.crates.create(element.x * 106, element.y, 'crate');
+            crate = this.crates.create( (element.x/2 )* 106, element.y/2, 'crate');
         }, this);
+
+        this.crates.forEach(function (e) {
+            e.scale.setTo(0.5);
+        },this);
 
         this.crates.setAll('body.allowGravity', false);
         this.crates.setAll('anchor.setTo', 0.5);
         this.crates.setAll('body.immovable', true);
-    },
-
-    createZombies: function () {
-        this.zombies = this.add.group();
-        this.zombies.scale.setTo(1,2);
-        this.zombies.enableBody = true;
-
-        var zombie;
-
-        this.levelData.zombiePiratesData.forEach(function(element) {
-            // zombie = new DrunkenTales.PirateZombie(this.game, element);
-            // this.game.add.existing(zombie);
-            // console.log(zombie);
-            zombie = this.zombies.create(element.x, element.y, 'pirateZombie');
-            zombie.animations.add('roaming', [0, 1], 2, true);
-            zombie.body.velocity.x = -100;
-            zombie.play('roaming');
-        },this);
-
-        this.zombies.setAll('body.allowGravity', false);
-
-        console.log(this.zombies);
     },
 
     killPlayer: function () {
@@ -203,14 +201,15 @@ DrunkenTales.GameState = {
         this.ship.scale.setTo(-0.5, 0.5);
         this.ship.anchor.setTo(0.5);
 
+
     },
 
     win: function (player, ship) {
         if (player.body.touching.down && ship.body.touching.up) {
             console.log('win salabim');
         }
-        if (player.body.touching.left || player.body.touching.right) {
-            console.log('ddusahudhsua');
+        if (ship.body.touching.left && player.body.touching.right) {
+            console.log('PEGOU O NAVIO  GRACIAS CABRON');
         }
     },
 

@@ -17,7 +17,7 @@ DrunkenTales.Player = function (game, data, cursors) {
     this.anchor.setTo(0.5);
 
     //parameters: (key, frames, fps, loop)
-    this.animations.add('walking',[0,1,2,3,4,5,4,3,2,1], 6, true);
+    this.animations.add('walking',[0,1,2,3,4,5], 6, true);
 
     //enabling game physics
     game.physics.arcade.enable(this);
